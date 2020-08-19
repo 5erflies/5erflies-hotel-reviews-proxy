@@ -3,7 +3,8 @@ import React from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
-const PORT = 3000;
+const query = window.location.search;
+const ENDPOINT = `${query}`;
 // style each component
 // create an app component which uses all services (teammates components)
 
@@ -14,28 +15,31 @@ class App extends React.Component {
       data: ''
     };
     this.getData = this.getData.bind(this);
+    this.setData = this.setData.bind(this);
   }
 
-  getData() {
-    console.log('getData/ComponentMount working!');
-    // axios.get(PORT)
-    //   .then(function (response) {
-    //     // handle success
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   });
+  getData(callback) {
+    console.log('getData working!');
+    axios.get(ENDPOINT)
+      .then(callback)
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
-    this.getData();
+    console.log('Component Mounting!');
+    this.getData(this.setData);
+  }
+
+  setData(data) {
+    console.log('Setting should work!');
+    this.setState({data: data});
   }
 
   render() {
     return (
-      <div>React Rendering</div>
+      <div >{this.state.data.data}</div>
     );
   }
 }
